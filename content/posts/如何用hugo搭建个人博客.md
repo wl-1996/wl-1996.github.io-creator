@@ -29,7 +29,9 @@ draft: false
 
 ### 四.hugo 里插入图片时遇到了如下问题：
 
-- 我是在 content-post-如何用hugo搭建个人博客.md 里插入图片，图片是 static-images-2.png，我第一次插入时的地址多写了一个/号，发现预览不出来（markdown preview）。然后我去掉最前边的/号就可以了。
+- 我是在 content-posts-如何用hugo搭建个人博客.md 里插入图片，图片是 static-images-2.png，我第一次插入时的地址多写了一个/号，发现预览不出来（markdown preview）。然后我去掉最前边的/号就可以了。
+
+* 正确的路径写法是 `![](/images/xxx.png)`
 
 ## 下面写一下第一次如何用 hugo 搭建个人博客（第二次就比较简单了）：
 
@@ -62,4 +64,4 @@ draft: false
 - 运行：git remote add origin git@github.com:wl-1996/wl1996.github.io.git;这一行创建完远程仓库后会看到的，直接复制到命令行里即可
 - 运行 git push -u origin master；
 - 刷新 github，点击设置，在 Github Pages 里可以看到网址；如果没看到，就修改Source，改为master后就可以看到；
-- 可以修改 Github Pages 里的 Custom domain（前提是你买了域名）；
+- 可以修改 Github Pages 里的 Custom domain（前提是你买了域名并且进行了配置。注意如果用自己的域名，记得 修改 config.toml里的 baseURL）；
