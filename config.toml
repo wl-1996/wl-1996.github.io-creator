@@ -1,0 +1,4 @@
+baseURL = "http://wangkuo.monster/"
+languageCode = "zh-Hans"
+title = "个人博客"
+theme = "ananke"
