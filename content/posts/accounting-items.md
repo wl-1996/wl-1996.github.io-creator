@@ -65,7 +65,7 @@ vue --version
 2. cd Accounting-Items ,表示进入该文件夹
 3. yarn serve ,为了在线预览，可以用编辑器打开上边创建的文件夹，然后用编辑器终端运行该命令
 
-## 5. 目录说明
+# 目录说明
 
 ![](/images/vue-muLuShuoMing.png)
 
@@ -84,6 +84,18 @@ vue --version
     首先引入语法是：`@import '~@/assets/styles/test.scss'`;
 
     其次设置方法是：![](/images/alias.png)
+
+# 撤销所有代码变动：
+
+命令行运行： git reset --hard HEAD
+
+注意，谨慎运行，除非你确定所有变动需要撤销才可以用这个命令。
+
+# webStorm设置格式化时自动加分号：
+
+打开设置-找到 Editor-找到 Code Style-找到 TypeScript-找到右侧的 Punctuation-然后按照下图设置：
+
+![](/images/punctuationSetting.png)
     
 
 
