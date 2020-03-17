@@ -16,7 +16,7 @@ declare module "*.svg" {
 }
 ```
 
-5. 此时报错会消失，但还不能用，接着命令行运行 yarn add svg-sprite-loader -D 安装一个 loader
+5. 此时报错会消失，但还不能用，接着命令行运行 `yarn add svg-sprite-loader -D` 安装一个 loader
 6. 在 vue.config.js 文件里添加代码(这一步配置的是 webpack)，最终代码为：
 
 ```js
@@ -55,7 +55,7 @@ module.exports = {
 };
 ```
 
-7. 重新运行 yarn serve ,此时就可以在 vue 组件的 template 里使用了：
+7. 重新运行 `yarn serve` ,此时就可以在 vue 组件的 template 里使用了：
 
 ```xml
   <svg>
@@ -80,19 +80,67 @@ try {
 
     ![](/images/svg-2.png)
 
-9. 下载的 svg 可能默认有填充颜色，这样你就无法再变更 svg 的颜色，怎么办？
+9.  下载的 svg 可能默认有填充颜色，这样你就无法再变更 svg 的颜色，怎么办？
 
-   简单方法是找到 svg 文件，在文件里搜索 fill ，去掉 fill 即可，例如：![](/images/svg-3.png)
+    简单方法是找到 svg 文件，在文件里搜索 fill ，去掉 fill 即可，例如：![](/images/svg-3.png)
 
-   但是这种方法不好，当你有 100 个 svg 文件时，难道你要修改 100 次么？
+    但是这种方法不好，当你有 100 个 svg 文件时，难道你要修改 100 次么？
 
-   因此正确的方法是使用一个 loader，即修改 vue.config.js 文件：
+    因此正确的方法是使用一个 loader，即修改 vue.config.js 文件（上边第 6 步已经修改过了，这次是增加两行代码）：
 
-   ```javaScript
-   .use('svgo-loader').loader('svgo-loader')
-     .tap(options => ({...options, plugins: [{removeAttrs: {attrs: 'fill'}}]})).end()
-   ```
+```javaScript
+.use('svgo-loader').loader('svgo-loader')
+  .tap(options => ({...options, plugins: [{removeAttrs: {attrs: 'fill'}}]})).end()
+```
 
-   然后安装这个 loader： 命令行运行 yarn add --dev svgo-loader
+    最终代码为：![](/images/svg-4.png)
+
+```javascript
+const path = require("path");
+module.exports = {
+  lintOnSave: false,
+  chainWebpack: config => {
+    const dir = path.resolve(__dirname, "src/assets/icons");
+    config.module
+      .rule("svg-sprite")
+      .test(/\.svg$/)
+      .include.add(dir)
+      .end() // 包含 icons 目录
+      .use("svg-sprite-loader")
+      .loader("svg-sprite-loader")
+      .options({ extract: false })
+      .end()
+      .use("svgo-loader")
+      .loader("svgo-loader")
+      .tap(options => ({
+        ...options,
+        plugins: [{ removeAttrs: { attrs: "fill" } }]
+      }))
+      .end();
+    config
+      .plugin("svg-sprite")
+      .use(require("svg-sprite-loader/plugin"), [{ plainSprite: true }]);
+    config.module.rule("svg").exclude.add(dir); // 其他 svg loader 排除 icons 目录
+
+    // config.module
+    //   .rule('svg-sprite')
+    //   .test(/\.(svg)(\?.*)?$/)
+    //   .include.add(dir).end()
+    //   .use('svg-sprite-loader-mod').loader('svg-sprite-loader-mod').options({extract: false}).end()
+    //   .use('svgo-loader').loader('svgo-loader')
+    //   .tap(options => ({...options, plugins: [{removeAttrs: {attrs: 'fill'}}]}))
+    //   .end()
+    // config.plugin('svg-sprite').use(require('svg-sprite-loader-mod/plugin'), [{plainSprite: true}])
+    // config.module.rule('svg').exclude.add(dir)
+  }
+};
+```
+
+    然后安装这个 loader： 命令行运行 `yarn add --dev svgo-loader`
+
+    重新运行 `yarn serve` 预览效果
 
 10. 还有一个 bug，但是视频里又说已经解决了，先不说这个问题了，遇到再加这部分内容吧。
+
+    原话：
+    2020 年，svg-sprite-loader 把我下个视频里说的 bug 给修复了。所以你在 WebStorm 里应该看不到我说的 bug 了。
