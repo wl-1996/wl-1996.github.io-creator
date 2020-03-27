@@ -79,14 +79,14 @@ draft: false
 要解决此问题，我们可以给 container 添加一个类，叫做 clearfix，下面是 clearfix 的实现形式（之一）：
 
 ```css
-.clearfix:after {
+.clearfix::after {
   display: block;
   content: "";
   clear: both;
 }
 ```
 
-上述代码通过伪元素 :after 在 container 后添加内容（content），来实现清除浮动。
+上述代码通过伪元素 ::after 在 container 后添加内容（content），来实现清除浮动。
 
 ![](/images/clearfix-5.png)
 
