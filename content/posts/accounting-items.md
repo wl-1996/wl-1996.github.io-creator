@@ -25,6 +25,7 @@ draft: false
 
 1. 运行 node --versioin 查看版本，如果不是 10，请先卸载当前版本：进入控制面板点击卸载即可（Mac 用户使用 brew uninstall node）
 2. 去 Node.js 官网下载第 10 版的安装包
+   ![](/images/nodejs.png)
 3. 一路点击下一步，注意安装目录可以改，一定不要在路径中出现中文和空格
 
 注意重装 Node.js 后，你以前用 npm 或 yarn 全局安装的命令可能都会消失不见，如果你需要，可以需要重新全局安装这些命令。
