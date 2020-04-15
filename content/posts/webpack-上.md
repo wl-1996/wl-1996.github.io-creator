@@ -45,21 +45,21 @@ webpack 是干嘛的？
 
 要安装最新版本或特定版本，请运行以下命令之一：
 
-npm install --save-dev webpack
+`npm install --save-dev webpack`或者`yarn add webpack --dev`
 
-npm install --save-dev webpack@<version>
+`npm install --save-dev webpack@<version>`或者`yarn add webpack@<version> --dev`
 
 ---
 
 如果你使用 webpack 4+ 版本，你还需要安装 CLI:
 
-npm install --save-dev webpack-cli
+`npm install --save-dev webpack-cli`或者`yarn add webpack-cli --dev`
 
 ---
 
 全局安装：
 
-npm install --global webpack
+`npm install --global webpack`或者`yarn global add webpack`
 
 ---
 
@@ -214,8 +214,8 @@ Http 缓存的作用：大大节约访问速度，无需重复请求。
 
 先下载 style-loader 和 css-loader:
 
-1. npm install --save-dev css-loader
-2. npm install --save-dev style-loader
+1. `yarn add css-loader --dev`
+2. `yarn add style-loader --dev`
 
 ---
 
@@ -232,7 +232,7 @@ Http 缓存的作用：大大节约访问速度，无需重复请求。
 这样每次都要先进到根目录运行打包命令，然后再进入到 dist 目录运行 http-server . -c-1 预览，太麻烦怎么办呢？
 
 1. 首先把配置改为开发环境（development）
-2. 安装：npm install --save-dev webpack-dev-server
+2. 安装：`yarn add webpack-dev-server --dev`
 3. 修改配置：![](/images/webpack-9.png)
 4. 修改 package.json 文件：![](/images/webpack-10.png)
 5. 命令行运行 yarn start 即可自动打开浏览器进行预览
@@ -241,7 +241,7 @@ Http 缓存的作用：大大节约访问速度，无需重复请求。
 
 但是这样引入的 css 是写到 sytle 标签里的 ![](/images/webpack-11.png)，怎么引入一个文件 css 呢？
 
-1. 下载插件 npm install --save-dev mini-css-extract-plugin
+1. 下载插件 `yarn add mini-css-extract-plugin --dev`
 2. 修改配置：
 
 ```javascript
@@ -327,9 +327,114 @@ module: {
 
 ### 目标六：用 webpack 引入 LESS 和 Stylus
 
+引入LESS：
+
+1. 先本地下载less和less-loader加载器： `yarn add less less-loader --dev`
+2. 配置webpack-config.js:
+   
+   ```js
+   // webpack.config.js
+   module.exports = {
+     ...
+     module: {
+       rules: [{
+         test: /\.less$/,
+         use: [{
+           loader: 'style-loader' // creates     style nodes from JS strings
+         }, {
+           loader: 'css-loader' // translates CSS    into CommonJS
+         }, {
+           loader: 'less-loader' // compiles Less    to CSS
+         }]
+       }]
+     }
+   ```
+
+---
+
+引入Stylus:
+
+1. 先本地下载 stylus 和 stylus-loader 加载器： `yarn add stylus stylus-loader --dev`
+2. 配置webpack-config.js:
+
+   ```js
+   // webpack.config.js
+   module.exports = {
+     ...
+     module: {
+       rules: [{
+         test: /\.styl$/,
+         use: ["style-loader","css-loader","stylus-loader"]
+       }]
+     }
+   ```
+
 ### 目标七：用 webpack 引入图片
 
+1. 下载file-loader加载器：`yarn add file-loader --dev`;
+2. 修改webpack.config.js：
+   
+   ```js
+    const path = require('path');
+
+    module.exports = {
+      module: {
+        rules: [
+  +       {
+  +         test: /\.(png|svg|jpg|gif)$/,
+  +         use: [
+  +           'file-loader',
+  +         ],
+  +       },
+        ],
+      },
+    };
+   ```
+
+3. 怎么使用？
+   
+   1. 第一 将png下载到本地；
+   2. 第二 ![](/images/webpack-14.png)
+
 ### 目标八：使用懒加载
+
+面试经常会问
+
+懒是什么意思，就是该做的时候不做，等到不得不做的时候才去做。
+
+为什么要懒加载？
+
+因为有的时候页面的js文件会很大，比如有100个模块，一开始就加载会很慢，用户体验不好。因此就可以懒加载，一开始只加载必要的模块，当用户点击的时候或者需要加载的时候再加载另外的模块。
+
+代码示例：
+
+入口文件index.js里：
+
+```js
+const button = document.createElement('button');
+button.innerText = '懒加载';
+div.appendChild(button);
+button.onclick = function () {
+    //import的动态语法，返回一个Promise对象
+    const promise = import('./src/lazy.js');
+    promise.then((module) => {
+            module.default();
+        },
+        () => {
+            console.log("模块加载错误");
+        });
+};
+```
+
+引入的文件lazy.js里：
+
+```js
+// 默认导出一个函数，加default和不加的效果是不一样的；
+// 如果不加default，那么index.js里的代码就需要把module.default()改为module.lazy()
+export default function lazy(){
+    console.log('我是一个懒加载的模块')
+}
+```
 
 ### 目标九：部署到 Github Pages
 
