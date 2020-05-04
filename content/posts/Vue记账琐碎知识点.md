@@ -238,4 +238,93 @@ v-model的完成写法是：
 <input :value='value' @input="value = event.target.value" type="text">
 ```
 
+---
+@watch作用？监听一个属性的变化，当这个属性发生变化时执行一个函数。
+
+@watch用法：
+
+```ts
+export default class Notes extends Vue {
+    value = '';
+    // 监听value属性的变化：
+    @Watch('value')
+    // value变化时执行一个函数：
+    // 注意第一个参数是新的值，第二个参数是旧的值
+    onValueChanged(newValue: string,oldValue: string){
+        this.$emit('update:notes',newValue)
+    }
+}
+```
+
+---
+
+如何在ts里声明一个类型？
+```ts
+// 声明一个类型recordItem，里面有四个属性，每个属性的类型声明好：
+type recordItem = {
+    tags: string[];
+    notes: string;
+    type: string;
+    amount: number;
+}
+```
+
+---
+
+类型和类不同，类型有7种：4基2空1对象；其中对象又可以划分为类，比如Date类。
+```ts
+type recordItem = {
+    tags: string[];
+    notes: string;
+    type: string;
+    amount: number;
+    time?: Date
+}
+```
+
+---
+
+数据库迁移策略：遇到再研究吧。在localStorage这一部分最后一节。
+
+---
+
+MVC：
+
+1. M-数据层；
+2. V-视图层；
+3. C-业务逻辑层；
+
+---
+ts和js配合的话导入模块要用require，不能用默认导入。而且不要ts和js混用，既然用了ts就都用ts啊！！！
+
+require导入默认导出的模块时需要加default，例如：
+
+导出模块model.js：(使用的是默认导出)
+```js
+const model = {
+    fetch() {
+        return JSON.parse(window.localStorage.getItem('recordList') || '[]');
+    },
+    save(recordList) {
+        window.localStorage.setItem('recordList', JSON.stringify(recordList));
+    }
+};
+// 使用的默认导出：
+export default model;
+```
+
+导入模块Money.vue：（需要加default，否则无法成功使用导入的内容）
+```ts
+// 需要加default：
+const model = require('@/model.js').default;
+```
+
+---
+
+本地存储只支持字符串，所以要通过JSON序列化：
+```ts
+window.localStorage.setItem('recordList', JSON.stringify(this.recordList));
+```
+
+
 
